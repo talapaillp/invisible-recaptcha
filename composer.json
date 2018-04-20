@@ -1,12 +1,12 @@
 {
-    "name": "albertcht/invisible-recaptcha",
+    "name": "talapaillp/invisible-recaptcha",
     "description": "Invisible reCAPTCHA For Laravel.",
     "keywords": ["recaptcha", "no-captcha", "captcha", "invisible", "invisible-recaptcha", "laravel", "laravel5", "php"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Albert Chen",
-            "email": "albert.cht@gmail.com"
+            "name": "Dastan Mukazhan",
+            "email": "dastan.m@talapai.kz"
         }
     ],
     "require": {

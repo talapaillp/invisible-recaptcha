@@ -84,7 +84,7 @@ class InvisibleReCaptcha
         } else {
             $this->renderedTimes++;
         }
-        $html .= "<div class='_g-recaptcha' id='_g-recaptcha_{$this->renderedTimes}'></div>" . PHP_EOL;
+        $html .= "<div class='_g-recaptcha' id='_g-recaptcha_{$this->renderedTimes}'></div><input type='hidden' name='g-recaptcha-response'>" . PHP_EOL;
 
         return $html;
     }
@@ -95,9 +95,9 @@ class InvisibleReCaptcha
         $html .= '<script>var _submitAction=true,_captchaForm;</script>';
         $html .= "<script>$.getScript('{$this->getCaptchaJs($lang)}').done(function(data,status,jqxhr){";
         $html .= '_renderedTimes=$("._g-recaptcha").length;_captchaForms=$("._g-recaptcha").closest("form");';
-        $html .= '_captchaForms.each(function(){$(this)[0].addEventListener("submit",function(e){e.preventDefault();';
+        $html .= '_captchaForms.each(function(){$(this)[0].addEventListener("submit",function(e){e.preventDefault(); $(this).form("submit"); ';
         $html .= '_captchaForm=$(this);_submitBtn=$(this).find(":submit");grecaptcha.execute();});});';
-        $html .= '_submitForm=function(){_submitBtn.trigger("captcha");grecaptcha.reset();if(_submitAction){_captchaForm.submit();}};';
+        $html .= '_submitForm=function(response){var input = _captchaForm.find("[name=\'g-recaptcha-response\']"); input.val(response);_submitBtn.trigger("captcha");grecaptcha.reset();if(_submitAction){_captchaForm.submit();}};';
         $html .= '_captchaCallback=function(){grecaptcha.render("_g-recaptcha_"+_renderedTimes,';
         $html .= "{sitekey:'{$this->siteKey}',size:'invisible',callback:_submitForm});}";
         $html .= '});</script>' . PHP_EOL;
