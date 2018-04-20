@@ -33,15 +33,45 @@ composer require albertcht/invisible-recaptcha:dev-multi-forms
 > **Please include jquery.js manually before you calling the captcha.**
 
 > Just call captcha function in forms directly, it will render only one captcha and all the forms will share the same captcha validation.
-
+> You must add new attribute like `data-submit` an evaluate strings as function. For example, my `data-sumbit` attribute is `signUp(event)`:
+```html
+<form accept-charset="utf-8" class="ui form" data-submit="signup(event)" autocomplete="off" data-inline="true" data-on="blur" method="POST">
+ <!--- All input fields and buttons-->
+</form>
+```
 ```javascript
-<script type="text/javascript">
-    $('#s2').on('captcha', function(e) {
-        // set it as false if your don't want to submit your from directly
+$('form.ui.form').each(function (key, item) {        
+     form.on('captcha', function (event) {
+        var onSubmit = event.currentTarget.getAttribute('data-submit');
+        eval(onSubmit);
         _submitAction = false;
-        // do other stuff
     });
-</script>
+});
+```
+> Ajax submit function realization
+```javascript
+function signup(event) {
+    event.preventDefault();
+
+    var el = event.currentTarget,
+        $form = $(el);
+
+    $.ajax({
+        method: 'POST',
+        url: '/signup',
+        data: $form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+            if (data.success == 'yes') {
+               alert("success")
+            }
+            $form.resetButtons();
+        },
+        error: function (err, status) {
+            console.error(err, status)
+        }
+    });
+}
 ```
 > In this branch, you can cutomize your submit behavior by listening a captcha event.
 
