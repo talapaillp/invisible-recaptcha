@@ -32,6 +32,13 @@ class InvisibleReCaptcha
     protected $hideBadge;
 
     /**
+     * The config to determine if neet add initialization code  to first render.
+     *
+     * @var boolean
+     */
+    protected $customInit;
+
+    /**
      * @var \GuzzleHttp\Client
      */
     protected $client;
@@ -50,11 +57,12 @@ class InvisibleReCaptcha
      * @param string $siteKey
      * @param boolean $hideBadge
      */
-    public function __construct($siteKey, $secretKey, $hideBadge = false)
+    public function __construct($siteKey, $secretKey, $hideBadge = false, $customInit = false)
     {
         $this->siteKey = $siteKey;
         $this->secretKey = $secretKey;
         $this->hideBadge = $hideBadge;
+        $this->customInit = $customInit;
         $this->client = new Client(['timeout' => 5]);
     }
 
@@ -80,7 +88,10 @@ class InvisibleReCaptcha
     {
         $html = '';
         if ($this->renderedTimes === 0) {
-            $html .= $this->initRender($lang);
+            if ($this->customInit == false) {
+                $html .= $this->initRender($lang);
+            }
+
         } else {
             $this->renderedTimes++;
         }
@@ -91,7 +102,7 @@ class InvisibleReCaptcha
 
     public function initRender($lang)
     {
-        $html = '<script>var _renderedTimes,_captchaCallback,_captchaForms,_submitForm,_submitBtn;</script>';
+        $html = '<script>alert(2);var _renderedTimes,_captchaCallback,_captchaForms,_submitForm,_submitBtn;</script>';
         $html .= '<script>var _submitAction=true,_captchaForm;</script>';
         $html .= "<script>$.getScript('{$this->getCaptchaJs($lang)}').done(function(data,status,jqxhr){";
         $html .= '_renderedTimes=$("._g-recaptcha").length;_captchaForms=$("._g-recaptcha").closest("form");';

@@ -28,11 +28,12 @@ class InvisibleReCaptchaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('captcha', function ($app) {
+
             return new InvisibleReCaptcha(
                 $app['config']['captcha.siteKey'],
                 $app['config']['captcha.secretKey'],
                 $app['config']['captcha.hideBadge'],
-                $app['config']['captcha.debug']
+                $app['config']['captcha.customInit']
             );
         });
 
